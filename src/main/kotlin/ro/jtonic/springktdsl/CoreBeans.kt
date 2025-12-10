@@ -8,22 +8,23 @@ import org.springframework.web.reactive.function.server.RequestPredicates as Rea
 import org.springframework.web.reactive.function.server.ServerRequest as ReactiveServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse as ReactiveServerResponse
 
-class Beans : BeanRegistrarDsl({
-    registerBean<Foo>()
+class CoreBeans : BeanRegistrarDsl({
+    register(BusinessBeans())
+    registerBean<CoreFoo>()
     registerBean(
         name = "bar",
         prototype = true,
         lazyInit = true,
         description = "Custom description") {
-        Bar(bean<Foo>())
+        CoreBar(bean<CoreFoo>(), bean<BusinessFoo>())
     }
     profile("baz") {
-        registerBean { Baz("Hello World!") }
+        registerBean { CoreBaz("Hello World!") }
     }
 
-    registerBean<List<Foo>>() { listOf(Foo())}
-    registerBean<List<Bar>> { listOf(Bar(bean()))}
-    registerBean<TypeParamBean> { TypeParamBean(bean<List<Foo>>(), bean<List<Bar>>()) }
+    registerBean<List<CoreFoo>>() { listOf(CoreFoo())}
+    registerBean<List<CoreBar>> { listOf(CoreBar(bean(), bean()))}
+    registerBean<TypeParamBean> { TypeParamBean(bean<List<CoreFoo>>(), bean<List<CoreBar>>()) }
 
     registerBean<UserHandler>()
     registerBean() {
@@ -44,16 +45,12 @@ class UserHandler {
     }
 }
 
-open class TypeParamBean(val foos: List<Foo>, val bars: List<Bar>)
+open class TypeParamBean(val coreFoos: List<CoreFoo>, val coreBars: List<CoreBar>)
 
-open class Baz(string: String) {
-
-}
-
-open class Bar(foo: Foo) {
+open class CoreBaz(string: String) {
 
 }
 
-class Foo {
+open class CoreBar(coreFoo: CoreFoo, businessFoo: BusinessFoo) {}
 
-}
+open class CoreFoo {}
