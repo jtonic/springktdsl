@@ -1,7 +1,7 @@
 # Users
 
 ## values
-@props = fee
+@props = monitoring
 
 ### Get user by Id
 http://localhost:8080/api/users/?id=1

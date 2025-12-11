@@ -6,3 +6,5 @@ fee:
 gee:
   c: 1
 
+monitoring:
+  enabled: on # off

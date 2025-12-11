@@ -8,6 +8,7 @@ class CoreBeans : BeanRegistrarDsl({
     val geeCValue: Int = env.getProperty<Int>("gee.c", -1)
     registerProperties<GeeProps>("gee")
 
+
     register(businessBeans)
     registerBean<CoreFoo>()
     registerBean<CoreBar>(
@@ -26,7 +27,7 @@ class CoreBeans : BeanRegistrarDsl({
     registerBean<TypeParamBean> { TypeParamBean(bean<List<CoreFoo>>(), bean<List<CoreBar>>()) }
 
     registerBean<UserHandler> {
-        UserHandler(bean<GeeProps>(), bean<FeeProps>())
+        UserHandler(env, bean<GeeProps>(), bean<FeeProps>())
     }
     registerBean() {
         coRouter(bean<UserHandler>())
