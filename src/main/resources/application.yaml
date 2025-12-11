@@ -1,1 +1,8 @@
 spring.application.name: springktdsl
+
+fee:
+  a: 1
+  b: two
+gee:
+  c: 1
+

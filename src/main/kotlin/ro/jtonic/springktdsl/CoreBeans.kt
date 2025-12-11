@@ -1,17 +1,16 @@
 package ro.jtonic.springktdsl
 
-import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.beans.factory.BeanRegistrarDsl
-import org.springframework.http.MediaType.APPLICATION_JSON
-import org.springframework.web.reactive.function.server.coRouter
-import org.springframework.web.reactive.function.server.RequestPredicates as ReactiveRequestPredicates
-import org.springframework.web.reactive.function.server.ServerRequest as ReactiveServerRequest
-import org.springframework.web.reactive.function.server.ServerResponse as ReactiveServerResponse
+import org.springframework.core.env.getProperty
+import ro.jtonic.springktdsl.BeanRegistrarDslExtensions.registerProperties
 
 class CoreBeans : BeanRegistrarDsl({
-    register(BusinessBeans())
+    val geeCValue: Int = env.getProperty<Int>("gee.c", -1)
+    registerProperties<GeeProps>("gee")
+
+    register(businessBeans)
     registerBean<CoreFoo>()
-    registerBean(
+    registerBean<CoreBar>(
         name = "bar",
         prototype = true,
         lazyInit = true,
@@ -23,34 +22,23 @@ class CoreBeans : BeanRegistrarDsl({
     }
 
     registerBean<List<CoreFoo>>() { listOf(CoreFoo())}
-    registerBean<List<CoreBar>> { listOf(CoreBar(bean(), bean()))}
+    registerBean<List<CoreBar>> { listOf(CoreBar(bean<CoreFoo>(), bean<BusinessFoo>())) }
     registerBean<TypeParamBean> { TypeParamBean(bean<List<CoreFoo>>(), bean<List<CoreBar>>()) }
 
-    registerBean<UserHandler>()
+    registerBean<UserHandler> {
+        UserHandler(bean<GeeProps>(), bean<FeeProps>())
+    }
     registerBean() {
-        val userHandler = bean<UserHandler>()
-        coRouter {
-            GET(pattern = "/api/users/", predicate = ReactiveRequestPredicates.accept(APPLICATION_JSON), f = userHandler::findById)
-        }
+        coRouter(bean<UserHandler>())
     }
 })
 
 data class User(val id: Long, val name: String)
 
-class UserHandler {
-    suspend fun findById(req: ReactiveServerRequest): ReactiveServerResponse = run {
-        val id = req.queryParam("id")
-        println("id = $id")
-        ReactiveServerResponse.ok().bodyValue(User(1, "Tony")).awaitSingle()
-    }
-}
-
 open class TypeParamBean(val coreFoos: List<CoreFoo>, val coreBars: List<CoreBar>)
 
-open class CoreBaz(string: String) {
+open class CoreBaz(string: String)
 
-}
+open class CoreBar(coreFoo: CoreFoo, businessFoo: BusinessFoo)
 
-open class CoreBar(coreFoo: CoreFoo, businessFoo: BusinessFoo) {}
-
-open class CoreFoo {}
+open class CoreFoo
