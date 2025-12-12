@@ -2,7 +2,7 @@ package ro.jtonic.springktdsl
 
 import org.springframework.beans.factory.BeanRegistrarDsl
 import org.springframework.core.env.getProperty
-import ro.jtonic.springktdsl.BeanRegistrarDslExtensions.registerProperties
+import ro.jtonic.springktdsl.SpringExtensions.registerProperties
 
 class CoreBeans : BeanRegistrarDsl({
 

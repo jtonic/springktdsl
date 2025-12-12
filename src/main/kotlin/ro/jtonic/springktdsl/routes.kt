@@ -28,6 +28,8 @@ class UserHandler(env: Environment, val geeProps: GeeProps, val feeProps: FeePro
 
     val monitoringEnabled = env.getProperty<MonitoringEnabled>("monitoring.enabled") ?: MonitoringEnabled.OFF
 
+    val monitoringEnabledOpt = env.getProperty<MonitoringEnabled>("monitoring.enabled")
+
     suspend fun findById(req: ReactiveServerRequest): ReactiveServerResponse = run {
         val id = req.queryParam("id")
         println("findById: $id")
@@ -40,7 +42,7 @@ class UserHandler(env: Environment, val geeProps: GeeProps, val feeProps: FeePro
         val body: Any? = when (props) {
             "gee" -> geeProps
             "fee" -> feeProps
-            "monitoring" -> monitoringEnabled
+            "monitoring" -> monitoringEnabledOpt
             else -> null
         }
         body?.run {
