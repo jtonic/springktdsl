@@ -7,7 +7,7 @@ import org.springframework.context.annotation.Import
 
 @SpringBootApplication
 @Import(CoreBeans::class)
-@EnableConfigurationProperties(FeeProps::class)
+@EnableConfigurationProperties(FeeProps::class) // this can be avoided
 class SpringKtDslApplication
 
 fun main(args: Array<String>) {
