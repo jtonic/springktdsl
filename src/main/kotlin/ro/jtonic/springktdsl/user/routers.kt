@@ -1,4 +1,4 @@
-package ro.jtonic.springktdsl
+package ro.jtonic.springktdsl.user
 
 import kotlinx.coroutines.reactive.awaitSingle
 import org.springframework.core.env.Environment
@@ -6,11 +6,14 @@ import org.springframework.core.env.getProperty
 import org.springframework.http.MediaType.APPLICATION_JSON
 import org.springframework.web.reactive.function.server.buildAndAwait
 import org.springframework.web.reactive.function.server.coRouter
+import ro.jtonic.springktdsl.config.FeeProps
+import ro.jtonic.springktdsl.config.GeeProps
+import ro.jtonic.springktdsl.config.MonitoringEnabled
 import org.springframework.web.reactive.function.server.RequestPredicates as ReactiveRequestPredicates
 import org.springframework.web.reactive.function.server.ServerRequest as ReactiveServerRequest
 import org.springframework.web.reactive.function.server.ServerResponse as ReactiveServerResponse
 
-fun coRouter(userHandler: UserHandler) = coRouter {
+fun userCoRouter(userHandler: UserHandler) = coRouter {
 
     GET(
         pattern = "/api/users/",

@@ -1,4 +1,4 @@
-package ro.jtonic.springktdsl
+package ro.jtonic.springktdsl.util
 
 import org.springframework.beans.factory.BeanRegistrarDsl
 import org.springframework.boot.context.properties.bind.Binder

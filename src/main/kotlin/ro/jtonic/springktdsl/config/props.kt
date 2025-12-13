@@ -1,4 +1,4 @@
-package ro.jtonic.springktdsl
+package ro.jtonic.springktdsl.config
 
 import org.springframework.boot.context.properties.ConfigurationProperties
 
